@@ -171,7 +171,6 @@
     margin-bottom: 0;
     padding: 0;
     list-style: none;
-    /* Astuce pour éviter le margin collapse */
     margin-top: calc(var(--dim-5) - var(--dim-3) - 1px);
     padding-top: 1px;
   }
@@ -266,24 +265,6 @@
     border: 0;
     margin-left: var(--dim-1);
     padding-right: var(--dim-4);
-  }
-  
-  .select {
-    display: flex;
-    position: relative;
-  }
-  
-  .select::after {
-    content: '';
-    display: block;
-    color: var(--gris-300);
-    width: var(--dim-3);
-    height: 100%;
-    background: url(/images/fleche-bas.svg) no-repeat;
-    background-position: center;
-    position: absolute;
-    pointer-events: none;
-    right: var(--dim-2);
   }
   
   .supprimer {
