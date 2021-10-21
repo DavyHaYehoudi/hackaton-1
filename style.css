@@ -144,6 +144,155 @@
   form {
     display: flex;
   }
+
+  /* Item */
+  
+  #nouvel-item {
+    border-radius: var(--border-radius) 0 0 var(--border-radius);
+    flex-grow: 1;
+  }
+  
+  #nouvel-item:valid {
+    --box-shadow-color: var(--vert-500);
+  }
+  
+  #nouvel-item:invalid {
+    --box-shadow-color: var(--rouge-500);
+  }
+  
+  #ajouter {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+  
+  /* Liste */
+  
+  ul {
+    margin-bottom: 0;
+    padding: 0;
+    list-style: none;
+    /* Astuce pour éviter le margin collapse */
+    margin-top: calc(var(--dim-5) - var(--dim-3) - 1px);
+    padding-top: 1px;
+  }
+  
+  li {
+    display: flex;
+    background-color: white;
+    border-radius: var(--border-radius);
+    margin-top: var(--dim-3);
+    height: var(--dim-6);
+    right: 0;
+    transition: box-shadow, transform;
+    transition-duration: .5s;
+  }
+  
+  .suppression {
+    transition-property: opacity, height, right, margin-top;
+    transition-delay: 0s, 67ms;
+    transition-duration: var(--transition-duration);
+    transition-timing-function: 
+      cubic-bezier(0, 0, 0.2, 1),
+      cubic-bezier(0.68, -0.55, 0.32, 2.5);
+    opacity: 0;
+    position: relative;
+    overflow: hidden;
+    height: 0;
+    margin-top: 0;
+  }
+  
+  .poignee {
+    background-color: var(--gris-100);
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    cursor: grab;
+    flex-shrink: 0;
+  }
+  
+  .poignee:active {
+    cursor: grabbing;
+  }
+  
+  .poignee:focus {
+    box-shadow: none;
+  }
+  
+  .poignee > img {
+    pointer-events: none;
+  }
+  
+  .nom {
+    transition: flex-grow ease var(--transition-duration);
+  }
+  
+  p.nom {
+    overflow: scroll;
+    white-space: nowrap;
+    flex-grow: 0;
+  }
+  
+  p.nom:focus {
+    flex-grow: 0;
+  }
+  
+  input.nom {
+    transition: flex-grow, box-shadow;
+    transition-duration: var(--transition-duration);
+    flex-grow: 0;
+    text-indent: var(--dim-3);
+    padding: 0;
+    padding-right: var(--dim-3);
+    min-width: 0;
+  }
+  
+  input.nom:focus {
+    flex-grow: 1;
+  }
+  
+  .separateur-vertical {
+    width: 1px;
+    height: var(--dim-4);
+    background-color: var(--gris-100);
+    align-self: center;
+  }
+  
+  .quantite {
+    padding-right: 0;
+  }
+  
+  .unite {
+    font-size: 1.5rem;
+    color: var(--gris-300);
+    border: 0;
+    margin-left: var(--dim-1);
+    padding-right: var(--dim-4);
+  }
+  
+  .select {
+    display: flex;
+    position: relative;
+  }
+  
+  .select::after {
+    content: '';
+    display: block;
+    color: var(--gris-300);
+    width: var(--dim-3);
+    height: 100%;
+    background: url(/images/fleche-bas.svg) no-repeat;
+    background-position: center;
+    position: absolute;
+    pointer-events: none;
+    right: var(--dim-2);
+  }
+  
+  .supprimer {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    background-color: var(--rouge-500);
+    margin-left: auto;
+    flex-shrink: 0;
+  }
   
   
   /* Footer */
