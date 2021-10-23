@@ -42,8 +42,24 @@ img {
 /* Fontes & Typographie */
 
 body {
-  font-family: 'Roboto', sans-serif;
-  -webkit-font-smoothing: antialiased;
+  font-family: 'Architects Daughter', cursive;
+}
+
+h1{
+  color: whitesmoke;
+  text-align: center;
+  animation: titre 1s ease 0s 1 normal forwards;
+}
+@keyframes titre {
+  0% {
+    opacity: 0;
+    transform: translateX(-250px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 body,
@@ -104,7 +120,7 @@ select {
 /* Style des balises de base */
 
 body {
-  background: url(/fond.png);
+  background: linear-gradient(rgba(0,0,0,.6), rgba(0,0,0,.6)),url(/fond.png);
   background-size: cover;
   min-height: 100vh;
   margin: 0;
@@ -129,10 +145,7 @@ p {
 
 .conteneur {
   max-width: 800px;
-  width: calc(100vw - 2 * var(--dim-5));
   margin: 150px auto;
-  background-color:  rgba(0, 0, 0, 0.5) ;
-  border-radius: 3rem;
 }
 
 /* Header */
@@ -171,7 +184,6 @@ ul {
   margin-bottom: 0;
   padding: 0;
   list-style: none;
-  margin-top: calc(var(--dim-5) - var(--dim-3) - 1px);
   padding-top: 1px;
 }
 
@@ -293,6 +305,68 @@ input.nom:focus {
   flex-shrink: 0;
 }
 
+/*animation caddie*/
+
+.animationCaddie{
+  display: flex;
+  justify-content: end;
+}
+
+#caddie{
+  display: block;
+ 
+  display: none;
+}
+
+.caddie{
+  position: relative;
+  border-radius: .5rem;
+  animation: caddie 1s ease 0s 1 normal forwards;
+}
+@keyframes caddie {
+  0% {
+    animation-timing-function: ease-in;
+    opacity: 0;
+    transform: translateY(-250px);
+  }
+
+  38% {
+    animation-timing-function: ease-out;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  55% {
+    animation-timing-function: ease-in;
+    transform: translateY(-65px);
+  }
+
+  72% {
+    animation-timing-function: ease-out;
+    transform: translateY(0);
+  }
+
+  81% {
+    animation-timing-function: ease-in;
+    transform: translateY(-28px);
+  }
+
+  90% {
+    animation-timing-function: ease-out;
+    transform: translateY(0);
+  }
+
+  95% {
+    animation-timing-function: ease-in;
+    transform: translateY(-8px);
+  }
+
+  100% {
+    animation-timing-function: ease-out;
+    transform: translateY(0);
+  }
+}
+
 /* Footer */
 
 footer {
@@ -301,13 +375,27 @@ footer {
   left: 0;
   right: 0;
   max-width: 800px;
-  width: calc(100vw - 2 * var(--dim-5));
   margin: 0 auto var(--dim-5);
+  display: flex;
 }
 
 #exporter {
   width: 100%;
   min-height: var(--dim-7);
+  font-weight: bold;
+  font-family: 'Architects Daughter', cursive;
+}
+
+#vider{
+  border-radius: 0.5rem;
+  background-color: rgb(177, 42, 42);
+  color: whitesmoke;
+  cursor: pointer;
+  font-size: var(--font-size-large);
+  font-weight: bold;
+  font-family: 'Architects Daughter', cursive;
+  border: none;
+  width: 100%;
 }
 
 /* Drag & Drop */

@@ -35,6 +35,16 @@ if (donnees !== null) {
   }
 }
 
+//Vider la liste
+const clear = document.querySelector('#vider');
+clear.addEventListener('click', function(){
+  const confirmation = confirm("Are you sure you want to delete the list ?")
+  if(confirmation == true){
+    localStorage.clear();
+    location.reload();
+  }
+})
+
 // Création d'un unique indicateur
 const indicateur = document.createElement('li');
 indicateur.classList.add('indicateur');
@@ -200,8 +210,116 @@ function drop(e) {
     // Sauvegarde des données
     sauvegarder();
 
+    /* Animations de déplacement */
+
+    // Constantes pour les animations
+    const CSS_SCALE = 'scale(1.05)';
+    const CSS_BOX_SHADOW = '0 0 24px rgba(32,32,32,.8)';
+    const PHASE_DECOLLAGE = 'decollage';
+    const PHASE_DEPLACEMENT = 'deplacement';
+    const PHASE_ATTERRISSAGE = 'atterrissage';
+
+    // Phase de décollage
+    function gestionAnimation(e) {
+      if (e.propertyName === 'transform') {
+        const phase = itemEnDeplacement.dataset.phase;
+        // Si je suis dans la phase de décollage alors faire...
+        switch(phase) {
+          case PHASE_DECOLLAGE:
+            itemEnDeplacement.dataset.phase = PHASE_DEPLACEMENT;
+
+            // Récupérer la hauteur de l'item hauteurItem
+            const hauteurItem = itemEnDeplacement.offsetHeight;
+            // Récupérer sa marge top margeTopItem
+            const margeTopItem = Number.parseInt(window.getComputedStyle(itemEnDeplacement).marginTop);
+            // Additionner les 2 => hauteurTotale
+            let hauteurTotale = hauteurItem + margeTopItem;
+            
+            // De combien d'items doit-on se déplacer ?
+            let nombreItems = Math.abs(positionIndicateur - positionInitiale) - 1;
+
+            // On vient compenser le décalage dû à l'indicateur
+            const deplacementVersLeHaut = positionIndicateur < positionInitiale;
+            if (deplacementVersLeHaut) {
+              nombreItems += 1;
+              // Si hauteurTotale > 0 => on se déplace vers le bas
+              // Si hauteurTotale < 0 => on se déplace vers le haut
+              hauteurTotale = -hauteurTotale;
+            }
+
+            itemEnDeplacement.style.transform += ` translateY(${nombreItems * hauteurTotale}px)`;
+
+            // Sélectionner les différents items de la liste à déplacer et les faire bouger dans la direction opposée
+
+            // position initiale = 0, indic = 3 => debut: 1 fin: 2
+            let debut = positionInitiale + 1;
+            let fin = positionIndicateur;
+
+            if (deplacementVersLeHaut) {
+              // position initiale = 3, indic = 1 => debut: 1 fin: 2
+              debut = positionIndicateur;
+              fin = positionInitiale;
+            }
+
+            for (let i = debut; i < fin; i++) {
+              elListe.children[i].style.transform = `translateY(${-hauteurTotale}px)`;
+            }
+            break;
+          case PHASE_DEPLACEMENT:
+            itemEnDeplacement.dataset.phase = PHASE_ATTERRISSAGE;
+            
+            // Si je suis à la fin de la phase de déplacement alors faire l'atterissage etc.
+            itemEnDeplacement.style.boxShadow = '';
+            let tr = itemEnDeplacement.style.transform;
+            // tr -> "scale(1.05) translateY(144px)"
+            // -> "translateY(144px)"
+            tr = tr.replace(CSS_SCALE, '');
+            tr = tr.trim();
+            itemEnDeplacement.style.transform = tr;
+            break;
+          case PHASE_ATTERRISSAGE:
+            itemEnDeplacement.removeAttribute('data-phase');
+
+            // Supprimer le gestionnaire d'évènement transitionend
+            itemEnDeplacement.removeEventListener('transitionend', gestionAnimation);
+
+            // Mettre à jour le DOM
+            // Cas particulier : déplacement à la fin de la liste
+            if (positionIndicateur === elListe.children.length) {
+              elListe.children[positionIndicateur - 1].after(itemEnDeplacement);
+            } else {
+              elListe.children[positionIndicateur].before(itemEnDeplacement);
+            }
+
+            // Retirer les styles CSS des items de la liste
+            for (let i = 0; i < elListe.children.length; i++) {
+              const enfant = elListe.children[i];
+              enfant.removeAttribute('class');
+
+              enfant.style.transition = 'none';
+              enfant.style.transform = '';
+
+              setTimeout(function() {
+                enfant.removeAttribute('style');
+              }, 0);
+            }
+
+            break;
+          default:
+            break;
+        }
+      }
+    }
+    itemEnDeplacement.addEventListener('transitionend', gestionAnimation);
+
+    itemEnDeplacement.dataset.phase = PHASE_DECOLLAGE;
+    itemEnDeplacement.style.position = "relative";
+    itemEnDeplacement.style.zIndex = "1";
+    itemEnDeplacement.style.transform = CSS_SCALE;
+    itemEnDeplacement.style.boxShadow = CSS_BOX_SHADOW;
   }
-} 
+}
+
 function dragOver(e) {
   // Permettre à l'élément d'être une cible de dépôt
   e.preventDefault();
@@ -266,6 +384,7 @@ function dragEnd(e) {
   }
 }
 
+
 elForm.addEventListener('submit', function(e) {
   // On empêche le rechargement de la page
   e.preventDefault();
@@ -295,8 +414,23 @@ elForm.addEventListener('submit', function(e) {
 
   // Mettre le focus immédiatement sur le champ nouvel item
   elNouvelItem.focus();
+
+  //Animation caddie
+  const caddie = document.querySelector('#caddie');
+  caddie.style.display = 'block';
+  caddie.classList.add('caddie');
+  const start = Date.now(); // start date
+
+    const timer = setInterval(function() {
+      const timePassed = Date.now() - start;
+      caddie.style.right = timePassed / 2 + 'px';
+      if (timePassed > 5500) {
+        clearInterval(timer);
+      }
+    }, 20);
   
-});
+  })
+
 
 // Insertion intelligente
 function extraireDonnees(nomItem) {
@@ -346,17 +480,28 @@ elNouvelItem.addEventListener('invalid', function(e) {
   const nom = elNouvelItem.value;
 
   if (nom.length === 0) {
-    elNouvelItem.setCustomValidity("Vous devez indiquer les informations de l'item, exemple : 250 g chocolat");
+    elNouvelItem.setCustomValidity("You must indicate the information of the item, example: 250 g chocolate");
   } else if (!/[A-Za-z]{2}/.test(nom)) {
     // Si nom ne contient pas 2 lettres côte à côte
-    elNouvelItem.setCustomValidity("Le nom de l'item doit faire 2 lettres minimum");
+    elNouvelItem.setCustomValidity("The name of the item must be 2 letters minimum");
   } else {
-    elNouvelItem.setCustomValidity("Les caractères spéciaux, les accents et autres lettres spécifiques ne sont pas autorisés");
+    elNouvelItem.setCustomValidity("Special characters, accents and other specific letters are not allowed");
   }
 });
 
+elExporter.addEventListener('click', function(e) {
+  // - <nom> (<quantite> <unite>)%0D%0A
+  let corps = "";
+  for (let i = 0; i < listeItems.length; i++) {
+    const item = listeItems[i];
+    const chaine = `- ${item.nom} (${item.quantite} ${item.unite})%0D%0A`;
+    corps += chaine;
+  }
 
+  // Construire l'URL de type mailto
+  let url = "mailto:d.sebbah@yahoo.fr";
+  url += "?subject=Liste de courses";
+  url += "&body=" + corps;
 
-
-
-
+  window.location = url;
+});
