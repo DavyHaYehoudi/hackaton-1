@@ -1,0 +1,12 @@
+{
+	"folders": [
+		{
+			"name": "Hackathon#1",
+			"path": "."
+		}
+	],
+	"settings": {
+		"git.ignoreLimitWarning": true,
+		"liveServer.settings.port": 5501
+	}
+}

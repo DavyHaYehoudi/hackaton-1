@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+  <title>Shopping List</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Architects+Daughter&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <div class="conteneur">
+    <header>
+      <h1>My Shopping List !</h1>
+      <form>
+        <input type="text" name="nouvel-item" id="nouvel-item" placeholder="Nouvel item" title="Authorized characters: the 26 letters in uppercase and lowercase, spaces, numbers and parentheses (the word must do minimum 2 letters)" autofocus autocomplete="off" required pattern="[A-Za-z\d ()]*[A-Za-z]{2}[A-Za-z\d ()]*">
+        <input id="ajouter" type="submit" class="bouton" value="Add">
+      </form>
+    </header>
+
+    <ul id="liste"></ul>
+  </div>
+
+  <div class="animationCaddie">
+    <img id="caddie" src="/caddie.png" width="200px">
+  </div>
+
+  <footer>
+    <button id="exporter" class="bouton texte-large">Export</button>
+    <button id="vider" class="bouton"> Clear </button>
+  </footer>
+
+  <template id="template-item">
+    <li>
+      <button class="bouton poignee" tabindex="-1"><img src="/poignee.svg" alt="déplacer un item"></button>
+      <p class="nom" tabindex="0"></p>
+      <div class="separateur-vertical"></div>
+      <p class="quantite" tabindex="0">1</p>
+      <div class="select">
+        <select name="unite" class="unite">
+          <option value="u." selected>u.</option>
+          <option value="g">g</option>
+          <option value="kg">kg</option>
+          <option value="L">L</option>
+        </select>
+      </div>
+      <button class="bouton supprimer"><img src="/poubelle.svg" alt="supprimer item"></button>
+    </li>
+  </template>
+
+  <script src="index.js"></script>
+</body>
+
+</html>
